@@ -36,9 +36,37 @@ Se guarda como dependencia de desarrollo porque no la necesito en producción, s
 
 - Ejecutamos el comando "npx nodemon index.js" y nodemos estará vigilando mi cógigo, si cambio algo y los guardo, nodemos va a reiniciar el servidor automaticamente
 
-## Middleware
+## Middleware logger (morgan)
 
 - Los middlewares en express se utilizan siempre con un app.use()
 
 - Son funciones
-- Usaremos Morgan para el request logger middleware
+- Usaremos Morgan para el request logger middleware: muestra por consola las peticiones que se van realizando
+- Morgan, en este caso, es una función que se va a ejecutar antes de las rutas
+- En el momento en el que comienzas a usar las rutas, Morgan lleva un rastro de ello
+
+## Middleware express.static('nombre de carpeta)
+
+- Este middleware es para enviar archivos al front-end
+- Estos archivos son archivos estaticos, es decir, son hojas de html, estilos, js. Cosas del front que se mandan desde el servidor
+
+## Express settings
+
+- Ahí configuramos con un app.set('nombre', valor)
+- después lo requerimos con un app.get('nombre)
+
+### Motores de plantillas (ejs)
+
+- SE agregand entro de las configuraciones (agil)
+- El motor de plantillas nos ayuda a extender nuestros archivos para su posible usp
+- Lo integramos con un app.set('view-engine', 'ejs)
+- Creamos una carpeta llamada 'views' y creamos dentro un index.ejs y hacemos una ruta en index para que lo podamos ver
+- Existen otros más como (pug, handlebars)
+
+## Bases de datos (manejadores de bd)
+
+Nos permiten que manegemos las bases dedatos sin tener que escribir código de bases de datos, sólo los usaremos con funciones de javascript
+
+- El ORM u ODM hace las consultas por nosotros
+- ORM (object-relational mapping)
+- ODM (object-document mapping)

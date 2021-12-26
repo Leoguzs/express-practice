@@ -1,21 +1,22 @@
 const express = require("express"); //estamos requiriendo un módulo
 //ejecutar express(); nos devuelve un objeto y a su vez es el servidor
 const app = express(); //app es mi servidor
+//usamos el middleware morgan para loggear
+const morgan = require("morgan");
 
-//middleware
-function logger(req, res, next) {
-  console.log(
-    `Route received: ${req.protocol}://${req.get("host")}${req.originalUrl}`
-  );
-  next();
-}
+//settings, en el primer parametro el nombre y en el segundo, valor de la variable
+app.set("appName", "Leonardo Express Tutorial"); //lo metemos en donde esta app.listen y ahí hacemos un console log app.get
+//ejemplo
+app.set("PORT", 5000);
+app.set("view-engine", "ejs"); //motor de plantilla
 
-//usamos morgan para loggear
-const morgan = require('morgan')
-
+//middlewares
 //para que express pueda entender los JSON
 app.use(express.json());
-app.use(logger);
+//configuramos morgan
+app.use(morgan("dev")); /* tiny, compact  */
+
+//routes
 
 //antes de que llegue a todas las rutas podemos hacer algo
 //antes de que pase por la ruta /user
@@ -25,16 +26,22 @@ app.all("/user", (req, res, next) => {
   next();
 });
 
-//mensaje de inicio en servidor
-const PORT = 3000;
-app.listen(PORT, () => {
-  //le pasamos el puerto y una funcion
-  console.log(`Server on port: ${PORT}`);
-}); //hemos creado el servidor pero no tiene una ruta
+//creamos nuestro puerto
+/* const PORT = 3000; reemplazado con un set */
 
 //le decimos la ruta inicial y funcion típica de node
-app.get("/", (req, res) => {
+/* app.get("/", (req, res) => {
   res.send("Welcome to the server");
+}); */
+
+//usando el EJS ejercicio para probarlo
+app.get("/", (req, res) => {
+  const data = [
+    { name: "Elias", age: 33 },
+    { name: "Marco", age: 22 },
+    { name: "Missael", age: 15 },
+  ];
+  res.render("index.ejs", { people: data }); //le paso data como un objeto de propiedad people
 });
 
 //creando nueva ruta
@@ -69,5 +76,18 @@ app.put("/user/:id", (req, res) => {
 
 app.delete("/user/:id", (req, res) => {
   //porque con el params te trae un objeto
-  res.send(`User ${req.params.id} has been deleted`);
+  res.send(`User ${req.params.id} has been deleted`); //postman
+  console.log("user deleted");
 });
+
+//recordemos que los middlewares van dentrode un app.use
+//le decimos el nombre de la carpeta
+app.use(express.static("public")); //localhost:300/index.html
+//es carpeta public, porque puedes acceder a ellas desde el navegador
+
+//mensaje de inicio en servidor
+app.listen(app.get("PORT"), () => {
+  //le pasamos el puerto y una funcion
+  console.log(`Server on port: ${app.get("PORT")}`);
+  console.log(app.get("appName"));
+}); //hemos creado el servidor pero no tiene una ruta
